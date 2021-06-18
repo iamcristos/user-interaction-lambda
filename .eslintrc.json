@@ -34,7 +34,8 @@
         "map": [
           ["@src", "./src"],
           ["@tests", "./tests"],
-          ["@queries", "./queries"]
+          ["@queries", "./src/queries"],
+          ["@libs", "./src/libs"]
         ],
         "extensions": [
           ".ts",

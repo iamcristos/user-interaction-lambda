@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"eventType\": \"Frederic\", \"eventSource\": \"Frederic\", \"userId\": \"Frederic\"}"
+}

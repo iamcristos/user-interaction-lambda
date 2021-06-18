@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test ./node_modules/.bin/jest --ci --verbose",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "buildtest": "tsc --noEmit",
-    "offline": "npx sls offline"
+    "offline": "npx sls offline start"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -26,13 +26,19 @@
     "@middy/http-json-body-parser": "^1.5.2",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.929.0",
-    "source-map-support": "^0.5.19"
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.4.1",
+    "jsonwebtoken": "^8.5.1",
+    "source-map-support": "^0.5.19",
+    "ts-jest": "^27.0.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.5",
     "@babel/preset-typescript": "^7.14.5",
     "@serverless/typescript": "^2.23.0",
+    "@shelf/jest-dynamodb": "^1.8.1",
     "@types/aws-lambda": "^8.10.71",
     "@types/jest": "^26.0.23",
     "@types/node": "^14.14.25",
@@ -48,6 +54,7 @@
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^2.23.0",
     "serverless-create-global-dynamodb-table": "^3.1.1",
+    "serverless-dynamodb-local": "^0.2.10",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-offline": "^7.0.0",
     "serverless-prune-plugin": "^1.5.0",

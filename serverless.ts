@@ -1,14 +1,25 @@
 import type { AWS } from '@serverless/typescript';
 
-import hello from '@functions/hello';
+import userInteraction from '@functions/userInteraction';
+
+import { login, signup } from '@functions/user';
+
+const SERVICE_NAME = 'petsdeli-lambda'
+const DYNAMO_TABLE = `${SERVICE_NAME}-dev`
+const USER_TABLE = `${SERVICE_NAME}-user-dev`
 
 const serverlessConfiguration: AWS = {
-  service: 'petsdeli',
+  service: SERVICE_NAME,
   frameworkVersion: '2',
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
+    },
+    dynamodb: {
+      stages: ['dev'],
+      start: {port: 8000, inMemory: true, migrate: true},
+      migration: {dir: 'offline/migrations'}
     },
     'serverless-iam-roles-per-function': {
       defaultInherit: true
@@ -18,7 +29,14 @@ const serverlessConfiguration: AWS = {
       number: 3
     }
   },
-  plugins: ['serverless-webpack','serverless-offline', 'serverless-iam-roles-per-function', 'serverless-create-global-dynamodb-table', 'serverless-prune-plugin'],
+  plugins: [
+  'serverless-webpack',
+  'serverless-offline', 
+  'serverless-iam-roles-per-function', 
+  'serverless-create-global-dynamodb-table', 
+  'serverless-prune-plugin',
+  'serverless-dynamodb-local'
+],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -28,6 +46,10 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SERVICE_NAME,
+      DYNAMO_TABLE,
+      USER_TABLE, 
+      JWT_SECRET: 'SECRET'
     },
     tracing: {
       lambda: true,
@@ -47,8 +69,52 @@ const serverlessConfiguration: AWS = {
        Resource: '*'
     }]
   },
+  resources: {
+    Resources: {
+      userInteractionDynamoDbTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          AttributeDefinitions: [{
+            AttributeName: "id",
+            AttributeType: "S"  
+          }],
+          KeySchema: [{
+            AttributeName: "id",
+            KeyType: "HASH"
+          }],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
+          },
+          TableName: DYNAMO_TABLE
+        }
+      },
+      UserDynamoDbTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          AttributeDefinitions: [{
+            AttributeName: "email",
+            AttributeType: "S"  
+          }],
+          KeySchema: [
+          {
+            AttributeName: "email",
+            KeyType: "HASH"
+          }
+        ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
+          },
+          TableName: USER_TABLE
+        }
+      }
+    }
+  },
   // import the function via paths
-  functions: { hello },
+  functions: { userInteraction, login, signup },
 };
 
 module.exports = serverlessConfiguration;

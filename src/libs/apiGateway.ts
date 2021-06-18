@@ -10,3 +10,20 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
     body: JSON.stringify(response)
   }
 }
+
+export const authJSONResponse = (response: Record<string, unknown>) => {
+  return {
+    statusCode: 401,
+    body: JSON.stringify(response)
+  }
+}
+
+export const setCookieResponse = (response: Record<string, unknown>, cookie) => {
+  return {
+    statusCode: 200,
+    headers: {
+        "Set-Cookie": cookie,
+      },
+    body: JSON.stringify(response)
+  }
+}

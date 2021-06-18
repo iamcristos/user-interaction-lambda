@@ -22,6 +22,10 @@ module.exports = {
         configFile: './tsconfig.paths.json',
       }),
     ],
+    alias: {
+        '@src': path.resolve(__dirname, './src'),
+        '@tests': path.resolve(__dirname, './tests'),
+      },
   },
   output: {
     libraryTarget: 'commonjs',
